@@ -1,4 +1,4 @@
-Wordnet-SenseSearch version 0.01
+Wordnet-SenseSearch version 0.02
 ================================
 
 This is a very simple module with little functionality. I don't have time to 
@@ -13,6 +13,9 @@ This module provides only one method, which takes a sense key and returns data
 for the identified synset.
 
 INSTALLATION
+
+You need the Wordnet files; change the path in lib/Wordnet/SenseSearch.pm to
+match the directory containing your data/index files.
 
 To install this module type the following:
 

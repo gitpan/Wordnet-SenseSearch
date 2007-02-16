@@ -1,4 +1,4 @@
-use Test::More tests => 14;
+use Test::More tests => 18;
 BEGIN { use_ok('Wordnet::SenseSearch') };
 
 my $wn = new Wordnet::SenseSearch (dir => "/usr/local/gbn/lexicon/other-dbs/wordnet-2.1/dict/");
@@ -20,4 +20,13 @@ is((scalar @{$walk{words}}), 1, "walk word count");
 is($walk{pos}, "v", "walk pos");
 is($walk{sensenum}, 1, "walk sense num");
 is($walk{lexfile}, 38, "walk lex file");
+
+# bug submitted by Fintan Costello
+my %earthworm = $wn->lookup("earthworm%1:05:00::");
+is($earthworm{pos}, "n", "earthworm pos");
+is($earthworm{lexfile},"05", "earthwork lex file");
+ok(@{$earthworm{words}} > 9, "earthworm words");
+
+my %empty = $wn->lookup("");
+ok(!%empty);
 

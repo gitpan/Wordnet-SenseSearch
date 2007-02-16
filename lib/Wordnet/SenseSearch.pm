@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Search::Dict;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our $WNDICT = '/usr/local/WordNet-2.1/dict/';
 
 our @DATAFILES = qw(data.noun data.verb data.adj data.adv data.adj);
@@ -25,6 +25,7 @@ sub new {
 sub lookup {
     my $self = shift;
     my $key = shift;
+    return unless $key;
     my $fh = $self->{_senseidx_fh};
     look $fh, $key;
     my $line = <$fh>;
@@ -36,11 +37,11 @@ sub lookup {
     seek DATA, $offset, 0;
     my $entry = <DATA>;
     close DATA;
-    $entry =~ m|^(\d+)\s(\d\d)\s(\w)\s([0-9A-Fa-f]+)\s|g;
-    my ($pos,$wcnt) = ($3,$4); # can't do inline assignment with /g
+    $entry =~ m|^(\d+)\s(\d\d)\s(\w)\s([\dA-Fa-f]+)\s|g;
+    my ($pos,$wcnt) = ($3,hex($4)); # can't do inline assignment with /g
     my @words;
     for (1 .. $wcnt) {
-        push @words, $entry =~ m|\G(\S+?)\s[0-9A-Fa-f]\s|g;
+        push @words, $entry =~ m|\G(\S+?)\s[\dA-Fa-f]\s|g;
     }
     my ($gloss) = $entry =~ m/\|\s*(.+?)\s*$/;
     return (words => \@words, pos => $pos, lexfile => $lexfile,
